@@ -9,17 +9,8 @@ class CourseController extends Controller
 {
     private function fetchDataFromApi($url)
     {
-        try {
-            $response = Http::get($url);
-
-            if (! $response->successful()) {
-                return collect();
-            }
-
-            return $response->object();
-        } catch (\Throwable $e) {
-            return collect();
-        }
+        $response = Http::get($url);
+        return $response->json();
     }
 
     public function index()

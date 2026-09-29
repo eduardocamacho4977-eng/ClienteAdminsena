@@ -7,26 +7,18 @@ use Illuminate\Http\Request;
 
 class AreaController extends Controller
 {
+    // Método privado para manejar llamadas HTTP repetitivas
     private function fetchDataFromApi($url)
     {
-        try {
-            $response = Http::get($url);
-
-            if (! $response->successful()) {
-                return collect();
-            }
-
-            return $response->object();
-        } catch (\Throwable $e) {
-            return collect();
-        }
+        $response = Http::get($url);
+        return $response->json();
     }
 
     public function index()
     {
         $url = env('URL_SERVER_API');
 
-        $areas = collect($this->fetchDataFromApi($url . '/v1/areas') ?? []);
+        $areas = $this->fetchDataFromApi($url . '/v1/areas');
 
         return view('area.index', compact('areas'));
     }
@@ -35,7 +27,7 @@ class AreaController extends Controller
     {
         $url = env('URL_SERVER_API');
 
-        $area = $this->fetchDataFromApi($url . '/v1/area/' . $id);
+        $area = $this->fetchDataFromApi($url . '/v1/areas/' . $id);
 
         return view('area.show', compact('area'));
     }

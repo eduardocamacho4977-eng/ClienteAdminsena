@@ -8,7 +8,16 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-     
+      <ul class="navbar-nav me-auto align-items-center">
+        <li class="nav-item"><a class="nav-link" href="{{ route('about') }}" style="color: #ffffff;">Sobre nosotros</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('contact') }}" style="color: #ffffff;">Contacto</a></li>
+      </ul>
+
+      <form action="{{ route('search') }}" method="GET" class="d-flex me-2">
+        <input class="form-control me-2" type="search" name="search" placeholder="Buscar..." value="{{ request('search') }}">
+        <button class="btn btn-outline-light" type="submit">Buscar</button>
+      </form>
+
       <ul class="navbar-nav ms-auto align-items-center">
         @auth
           @php
@@ -37,7 +46,7 @@
               {{ $adminMenuLabel }}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="adminModulesMenu">
-             
+              <li><a class="dropdown-item" href="{{ route('administracion') }}">Vista administración</a></li>
               <li><a class="dropdown-item" href="{{ route('area.index') }}">Áreas</a></li>
               <li><a class="dropdown-item" href="{{ route('training_center.index') }}">Centros</a></li>
               <li><a class="dropdown-item" href="{{ route('course.index') }}">Cursos</a></li>
@@ -64,7 +73,7 @@
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="roleMenu">
               @foreach($roles as $role)
                 <li>
-                 
+                  <form action="{{ route('role.switch') }}" method="POST">
                     @csrf
                     <input type="hidden" name="role" value="{{ $role['value'] }}">
                     <button type="submit" class="dropdown-item {{ auth()->user()->getEffectiveRole() === $role['value'] ? 'active fw-bold' : '' }}">
@@ -77,7 +86,7 @@
           </li>
 
           <li class="nav-item">
-         
+            <form action="{{ route('logout') }}" method="POST" class="d-inline">
               @csrf
               <button type="submit" class="btn nav-link text-white border-0 bg-transparent" style="cursor: pointer;">
                 Cerrar sesión
