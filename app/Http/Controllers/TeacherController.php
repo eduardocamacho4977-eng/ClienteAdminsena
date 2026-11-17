@@ -10,7 +10,7 @@ class TeacherController extends Controller
     private function fetchDataFromApi($url)
     {
         $response = Http::get($url);
-        return $response->json();
+        return $response->throw()->object();
     }
 
     public function index()
@@ -24,9 +24,10 @@ class TeacherController extends Controller
     public function create()
     {
         $url = env('URL_SERVER_API');
-        $teacher = Http::get($url . '/teachers')->json();
+        $areas = Http::get($url . '/v1/areas')->object();
+        $training_centers = Http::get($url . '/v1/training_centers')->object();
 
-        return view('teacher.create', compact('teacher'));
+        return view('teacher.create', compact('areas', 'training_centers'));
     }
 
     public function store(Request $request)
@@ -50,7 +51,7 @@ class TeacherController extends Controller
     public function show($id)
     {
         $url = env('URL_SERVER_API');
-        $teacher = $this->fetchDataFromApi($url . '/v1/teachers/' . $id);
+        $teacher = $this->fetchDataFromApi($url . '/v1/teacher/' . $id);
 
         return view('teacher.show', compact('teacher'));
     }
@@ -58,15 +59,17 @@ class TeacherController extends Controller
     public function edit($id)
     {
         $url = env('URL_SERVER_API');
-        $teacher = $this->fetchDataFromApi($url . '/v1/teachers/' . $id);
+        $teacher = $this->fetchDataFromApi($url . '/v1/teacher/' . $id);
+        $areas = Http::get($url . '/v1/areas')->object();
+        $training_centers = Http::get($url . '/v1/training_centers')->object();
 
-        return view('teacher.edit', compact('teacher'));
+        return view('teacher.edit', compact('teacher', 'areas', 'training_centers'));
     }
 
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url . '/v1/teachers/' . $id, $request->all());
+        Http::put($url . '/v1/teacher/' . $id, $request->all())->throw();
 
         return redirect()->route('teacher.index');
     }
@@ -74,7 +77,7 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         $url = env('URL_SERVER_API');
-        Http::delete($url . '/v1/teachers/' . $id);
+        Http::delete($url . '/v1/teacher/' . $id)->throw();
 
         return redirect()->route('teacher.index');
     }

@@ -4,9 +4,9 @@
     <h1>LISTAR APRENDICES</h1>
 
     <div class="container">
-        <form method="GET" action="{{ route('apprentice.index') }}" class="row g-2 mb-3">
+        <form method="GET" action="{{ route('apprentice.index') }}" class="row g-2 mb-3" data-table-filter="#idApprentice">
             <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, correo, teléfono, curso o computador" value="{{ $search ?? '' }}">
+                <input type="search" name="search" class="form-control" placeholder="Buscar por nombre, correo, teléfono, curso o computador" value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
@@ -31,17 +31,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($apprentices as $apprentice)
+                @forelse ($apprentices as $apprentice)
                     <tr>
                         <td>{{ $apprentice->name }}</td>
                         <td>{{ $apprentice->email }}</td>
                         <td>{{ $apprentice->cell_number }}</td>
-                        <td>{{ $apprentice->course->course_number }}</td>
-                        <td>{{ $apprentice->computer->number }}</td>                   
+                        <td>{{ data_get($apprentice, 'course.course_number', 'N/A') }}</td>
+                        <td>{{ data_get($apprentice, 'computer.number', 'N/A') }}</td>
                         <td>
-                            @if ($apprentice->urlFoto)
+                            @if ($apprentice->imagen_url)
                                 <img
-                                    src="{{ asset('storage/images/' . $apprentice->urlFoto) }}"
+                                    src="{{ $apprentice->imagen_url }}"
                                     alt="Imagen del aprendiz"
                                     width="80"
                                     height="80"
@@ -60,7 +60,11 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center">No hay aprendices registrados.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

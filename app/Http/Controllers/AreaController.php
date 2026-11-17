@@ -11,7 +11,7 @@ class AreaController extends Controller
     private function fetchDataFromApi($url)
     {
         $response = Http::get($url);
-        return $response->json();
+        return $response->throw()->object();
     }
 
     public function index()
@@ -24,10 +24,7 @@ class AreaController extends Controller
 
     public function create()
     {
-        $url = env('URL_SERVER_API');
-        $area = Http::get($url . '/v1/areas')->json();
-
-        return view('area.create', compact('area'));
+        return view('area.create');
     }
 
     public function store(Request $request)
@@ -50,7 +47,7 @@ class AreaController extends Controller
     public function show($id)
     {
         $url = env('URL_SERVER_API');
-        $area = $this->fetchDataFromApi($url . '/v1/areas/' . $id);
+        $area = $this->fetchDataFromApi($url . '/v1/area/' . $id);
 
         return view('area.show', compact('area'));
     }
@@ -58,7 +55,7 @@ class AreaController extends Controller
     public function edit($id)
     {
         $url = env('URL_SERVER_API');
-        $area = $this->fetchDataFromApi($url . '/v1/areas/' . $id);
+        $area = $this->fetchDataFromApi($url . '/v1/area/' . $id);
 
         return view('area.edit', compact('area'));
     }
@@ -66,7 +63,7 @@ class AreaController extends Controller
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url . '/v1/areas/' . $id, $request->all());
+        Http::put($url . '/v1/area/' . $id, $request->all())->throw();
 
         return redirect()->route('area.index');
     }
@@ -74,7 +71,7 @@ class AreaController extends Controller
     public function destroy($id)
     {
         $url = env('URL_SERVER_API');
-        Http::delete($url . '/v1/areas/' . $id);
+        Http::delete($url . '/v1/area/' . $id)->throw();
 
         return redirect()->route('area.index');
     }

@@ -11,12 +11,12 @@
 
             <div class="mb-3">
                 <label class="form-label">Número de Curso</label>
-                <input type="number" name="course_number" class="form-control" required>
+                <input type="number" name="course_number" class="form-control" value="{{ old('course_number') }}" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Día</label>
-                <input type="text" name="day" class="form-control">
+                <input type="text" name="day" class="form-control" value="{{ old('day') }}" required>
             </div>
 
             <div class="mb-3">
@@ -24,7 +24,7 @@
                 <select name="area_id" id="area_id" class="form-select" required>
                     <option value="">Seleccione un área</option>
                     @foreach($areas as $area)
-                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                        <option value="{{ $area->id }}" @selected(old('area_id') == $area->id)>{{ $area->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -34,13 +34,13 @@
                 <select name="training_center_id" id="training_center_id" class="form-select" required>
                     <option value="">Seleccione un centro de formación</option>
                     @foreach($training_centers as $training_center)
-                        <option value="{{ $training_center->id }}">{{ $training_center->name }}</option>
+                        <option value="{{ $training_center->id }}" @selected(old('training_center_id') == $training_center->id)>{{ $training_center->name }}</option>
                     @endforeach
                 </select>
             </div>
               <div class="mb-3">
                 <label class="form-label">Imagen</label>
-                <input type="file" name="urlFoto" class="form-control-file" accept="image/*">
+                <input type="file" name="imagen" class="form-control" accept="image/jpeg,image/png,image/webp" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Crear Curso</button>

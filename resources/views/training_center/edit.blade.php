@@ -9,11 +9,11 @@
             @method('PUT')
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input type="text" name="name" class="form-control" value="{{ $training_center->name }}" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name', $training_center->name) }}" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Ubicación</label>
-                <input type="text" name="location" class="form-control" value="{{ $training_center->location }}">
+                <input type="text" name="location" class="form-control" value="{{ old('location', $training_center->location) }}" required>
             </div>
             <button class="btn btn-primary">Guardar</button>
             <a href="{{ route('training_center.index') }}" class="btn btn-secondary">Cancelar</a>

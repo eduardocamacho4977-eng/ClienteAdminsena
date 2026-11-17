@@ -10,7 +10,7 @@ class CourseController extends Controller
     private function fetchDataFromApi($url)
     {
         $response = Http::get($url);
-        return $response->json();
+        return $response->throw()->object();
     }
 
     public function index()
@@ -24,9 +24,10 @@ class CourseController extends Controller
     public function create()
     {
         $url = env('URL_SERVER_API');
-        $course = Http::get($url . '/v1/courses')->json();
+        $areas = Http::get($url . '/v1/areas')->object();
+        $training_centers = Http::get($url . '/v1/training_centers')->object();
 
-        return view('course.create', compact('course'));
+        return view('course.create', compact('areas', 'training_centers'));
     }
 
     public function store(Request $request)
@@ -51,7 +52,7 @@ class CourseController extends Controller
     public function show($id)
     {
         $url = env('URL_SERVER_API');
-        $course = $this->fetchDataFromApi($url . '/v1/courses/' . $id);
+        $course = $this->fetchDataFromApi($url . '/v1/course/' . $id);
 
         return view('course.show', compact('course'));
     }
@@ -59,15 +60,17 @@ class CourseController extends Controller
     public function edit($id)
     {
         $url = env('URL_SERVER_API');
-        $course = $this->fetchDataFromApi($url . '/v1/courses/' . $id);
+        $course = $this->fetchDataFromApi($url . '/v1/course/' . $id);
+        $areas = Http::get($url . '/v1/areas')->object();
+        $training_centers = Http::get($url . '/v1/training_centers')->object();
 
-        return view('course.edit', compact('course'));
+        return view('course.edit', compact('course', 'areas', 'training_centers'));
     }
 
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url . '/v1/courses/' . $id, $request->all());
+        Http::put($url . '/v1/course/' . $id, $request->all())->throw();
 
         return redirect()->route('course.index');
     }
@@ -75,7 +78,7 @@ class CourseController extends Controller
     public function destroy($id)
     {
         $url = env('URL_SERVER_API');
-        Http::delete($url . '/v1/courses/' . $id);
+        Http::delete($url . '/v1/course/' . $id)->throw();
 
         return redirect()->route('course.index');
     }

@@ -10,7 +10,7 @@ class ComputerController extends Controller
     private function fetchDataFromApi($url)
     {
         $response = Http::get($url);
-        return $response->json();
+        return $response->throw()->object();
     }
 
     public function index()
@@ -23,10 +23,7 @@ class ComputerController extends Controller
 
     public function create()
     {
-        $url = env('URL_SERVER_API');
-        $computer = Http::get($url . '/v1/computers')->json();
-
-        return view('computer.create', compact('computer'));
+        return view('computer.create');
     }
 
     public function store(Request $request)
@@ -51,7 +48,7 @@ class ComputerController extends Controller
     public function show($id)
     {
         $url = env('URL_SERVER_API');
-        $computer = $this->fetchDataFromApi($url . '/v1/computers/' . $id);
+        $computer = $this->fetchDataFromApi($url . '/v1/computer/' . $id);
 
         return view('computer.show', compact('computer'));
     }
@@ -59,7 +56,7 @@ class ComputerController extends Controller
     public function edit($id)
     {
         $url = env('URL_SERVER_API');
-        $computer = $this->fetchDataFromApi($url . '/v1/computers/' . $id);
+        $computer = $this->fetchDataFromApi($url . '/v1/computer/' . $id);
 
         return view('computer.edit', compact('computer'));
     }
@@ -67,7 +64,7 @@ class ComputerController extends Controller
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url . '/v1/computers/' . $id, $request->all());
+        Http::put($url . '/v1/computer/' . $id, $request->all())->throw();
 
         return redirect()->route('computer.index');
     }
@@ -75,7 +72,7 @@ class ComputerController extends Controller
     public function destroy($id)
     {
         $url = env('URL_SERVER_API');
-        Http::delete($url . '/v1/computers/' . $id);
+        Http::delete($url . '/v1/computer/' . $id)->throw();
 
         return redirect()->route('computer.index');
     }

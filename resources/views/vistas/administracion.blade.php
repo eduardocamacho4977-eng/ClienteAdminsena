@@ -96,7 +96,7 @@
                 <i class="bi bi-sliders2 fs-2" style="color: #00A651;" aria-hidden="true"></i>
             </div>
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 gy-3">
-                @admin
+                @if(auth()->user()->getEffectiveRole() === \App\Models\User::ROLE_ADMINISTRATOR)
                     <div class="col">
                         <a href="{{ route('area.index') }}" class="card card-custom p-3 h-100 text-decoration-none">
                             <i class="bi bi-diagram-3 fs-3 mb-2" style="color: #00A651;" aria-hidden="true"></i>
@@ -139,7 +139,7 @@
                             <p class="text-muted mb-0">Controla los equipos disponibles.</p>
                         </a>
                     </div>
-                @elseif(auth()->user()->isInstructor())
+                @elseif(auth()->user()->getEffectiveRole() === \App\Models\User::ROLE_INSTRUCTOR)
                     <div class="col">
                         <a href="{{ route('apprentice.index') }}" class="card card-custom p-3 h-100 text-decoration-none">
                             <i class="bi bi-people fs-3 mb-2" style="color: #00A651;" aria-hidden="true"></i>
@@ -154,7 +154,7 @@
                             <p class="text-muted mb-0">Gestiona la asignatura que dicta.</p>
                         </a>
                     </div>
-                @elseif(auth()->user()->isApplicant())
+                @elseif(auth()->user()->getEffectiveRole() === \App\Models\User::ROLE_APPLICANT)
                     <div class="col">
                         <a href="#" class="card card-custom p-3 h-100 text-decoration-none">
                             <i class="bi bi-file-earmark-text fs-3 mb-2" style="color: #00A651;" aria-hidden="true"></i>

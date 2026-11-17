@@ -9,7 +9,7 @@
             @method('PUT')
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input type="text" name="name" class="form-control" value="{{ $area->name }}" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name', $area->name) }}" required>
             </div>
             <button class="btn btn-primary">Guardar</button>
             <a href="{{ route('area.index') }}" class="btn btn-secondary">Cancelar</a>

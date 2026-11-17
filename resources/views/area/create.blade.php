@@ -11,12 +11,12 @@
 
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input type="text" name="name" class="form-control" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
             </div>
              <br>
            <div class="mb-3">
                 <label class="form-label">Imagen</label>
-                <input type="file" name="urlFoto" class="form-control-file" accept="image/*">
+                <input type="file" name="imagen" class="form-control" accept="image/jpeg,image/png,image/webp" required>
             </div>
 
 
@@ -27,5 +27,4 @@
     </div>
 
     @endsection
-
 

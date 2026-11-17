@@ -4,9 +4,9 @@
     <h1>LISTAR PROFESORES</h1>
 
     <div class="container">
-        <form method="GET" action="{{ route('teacher.index') }}" class="row g-2 mb-3">
+        <form method="GET" action="{{ route('teacher.index') }}" class="row g-2 mb-3" data-table-filter="#idTeacher">
             <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, email, ID o área/centro" value="{{ $search ?? '' }}">
+                <input type="search" name="search" class="form-control" placeholder="Buscar por nombre, email, ID o área/centro" value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
@@ -31,17 +31,17 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($teachers as $teacher)
+                @forelse ($teachers as $teacher)
                     <tr>
                     
                         <td>{{ $teacher->name }}</td>
                         <td>{{ $teacher->email }}</td>
-                        <td>{{ $teacher->trainingCenter->name ?? 'N/A' }}</td>
-                        <td>{{ $teacher->area->name ?? 'N/A' }}</td>
+                        <td>{{ data_get($teacher, 'trainingCenter.name', 'N/A') }}</td>
+                        <td>{{ data_get($teacher, 'area.name', 'N/A') }}</td>
                         <td>
-                            @if ($teacher->urlFoto)
+                            @if ($teacher->imagen_url)
                                 <img
-                                    src="{{ asset('storage/images/' . $teacher->urlFoto) }}"
+                                    src="{{ $teacher->imagen_url }}"
                                     alt="Imagen del profesor"
                                     width="80"
                                     height="80"
@@ -59,7 +59,11 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">No hay profesores registrados.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

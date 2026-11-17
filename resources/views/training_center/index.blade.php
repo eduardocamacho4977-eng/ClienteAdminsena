@@ -4,9 +4,9 @@
     <h1>LISTAR CENTROS DE FORMACIÓN</h1>
 
     <div class="container">
-        <form method="GET" action="{{ route('training_center.index') }}" class="row g-2 mb-3">
+        <form method="GET" action="{{ route('training_center.index') }}" class="row g-2 mb-3" data-table-filter="#idTrainingCenter">
             <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre, ubicación o ID" value="{{ $search ?? '' }}">
+                <input type="search" name="search" class="form-control" placeholder="Buscar por nombre, ubicación o ID" value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
@@ -28,14 +28,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($training_centers as $training_center)
+                @forelse ($training_centers as $training_center)
                     <tr>
                         <td>{{ $training_center->name }}</td>
                         <td>{{ $training_center->location }}</td>
                         <td>
-                            @if ($training_center->urlFoto)
+                            @if ($training_center->imagen_url)
                                 <img
-                                    src="{{ asset('storage/images/' . $training_center->urlFoto) }}"
+                                    src="{{ $training_center->imagen_url }}"
                                     alt="Imagen del centro"
                                     width="80"
                                     height="80"
@@ -53,7 +53,11 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No hay centros de formación registrados.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

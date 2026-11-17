@@ -11,12 +11,12 @@
 
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
-                <input type="text" name="name" class="form-control" required>
+                <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Correo</label>
-                <input type="email" name="email" class="form-control" required>
+                <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
             </div>
 
             <div class="mb-3">
@@ -24,7 +24,7 @@
                 <select name="area_id" id="area_id" class="form-select" required>
                     <option value="">Seleccione un área</option>
                     @foreach($areas as $area)
-                        <option value="{{ $area->id }}">{{ $area->name }}</option>
+                        <option value="{{ $area->id }}" @selected(old('area_id') == $area->id)>{{ $area->name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -34,13 +34,13 @@
                 <select name="training_center_id" id="training_center_id" class="form-select" required>
                     <option value="">Seleccione un Centro de Formación</option>
                     @foreach($training_centers as $training_center)
-                        <option value="{{ $training_center->id }}">{{ $training_center->name }}</option>
+                        <option value="{{ $training_center->id }}" @selected(old('training_center_id') == $training_center->id)>{{ $training_center->name }}</option>
                     @endforeach
                 </select>
             </div>
               <div class="mb-3">
                 <label class="form-label">Imagen</label>
-                <input type="file" name="urlFoto" class="form-control-file" accept="image/*">
+                <input type="file" name="imagen" class="form-control" accept="image/jpeg,image/png,image/webp" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Crear Profesor</button>

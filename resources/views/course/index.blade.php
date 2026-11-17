@@ -4,9 +4,9 @@
     <h1>LISTAR CURSOS</h1>
 
     <div class="container">
-        <form method="GET" action="{{ route('course.index') }}" class="row g-2 mb-3">
+        <form method="GET" action="{{ route('course.index') }}" class="row g-2 mb-3" data-table-filter="#idCourse">
             <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por número, día, ID o área/centro" value="{{ $search ?? '' }}">
+                <input type="search" name="search" class="form-control" placeholder="Buscar por número, día, ID o área/centro" value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
@@ -30,16 +30,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($courses as $course)
+                @forelse ($courses as $course)
                     <tr>
                         <td>{{ $course->course_number }}</td>
                         <td>{{ $course->day }}</td>
-                        <td>{{ $course->area->name}}</td>
-                        <td>{{ $course->trainingCenter->name }}</td>
+                        <td>{{ data_get($course, 'area.name', 'N/A') }}</td>
+                        <td>{{ data_get($course, 'trainingCenter.name', 'N/A') }}</td>
                         <td>
-                            @if ($course->urlFoto)
+                            @if ($course->imagen_url)
                                 <img
-                                    src="{{ asset('storage/images/' . $course->urlFoto) }}"
+                                    src="{{ $course->imagen_url }}"
                                     alt="Imagen del curso"
                                     width="80"
                                     height="80"
@@ -51,14 +51,18 @@
                         <td>
                             <a href="{{ route('course.show', $course->id) }}" class="btn btn-sm btn-primary">mostrar</a>
                             <a href="{{ route('course.edit', $course->id) }}" class="btn btn-sm btn-secondary">editar</a>
-                            <form action="{{ route('course.destroy', $course->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Eliminar curso? Esto borrará {{ $course->apprentices->count() }} aprendiz(es) relacionados.')">
+                            <form action="{{ route('course.destroy', $course->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('¿Eliminar este curso?')">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Eliminar</button>
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center">No hay cursos registrados.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

@@ -4,9 +4,9 @@
     <h1>LISTAR COMPUTADORAS</h1>
 
     <div class="container">
-        <form method="GET" action="{{ route('computer.index') }}" class="row g-2 mb-3">
+        <form method="GET" action="{{ route('computer.index') }}" class="row g-2 mb-3" data-table-filter="#idComputer">
             <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por número, marca o ID" value="{{ $search ?? '' }}">
+                <input type="search" name="search" class="form-control" placeholder="Buscar por número, marca o ID" value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
@@ -23,14 +23,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($computers as $computer)
+                @forelse ($computers as $computer)
                     <tr>
                         <td>{{ $computer->number }}</td>
                         <td>{{ $computer->brand }}</td>
                         <td>
-                            @if ($computer->imagen)
+                            @if ($computer->imagen_url)
                                 <img
-                                    src="{{ asset('storage/images/' . $computer->imagen) }}"
+                                    src="{{ $computer->imagen_url }}"
                                     alt="Imagen de la computadora"
                                     width="80"
                                     height="80"
@@ -49,7 +49,11 @@
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center">No hay computadoras registradas.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
         <div class="mb-3">

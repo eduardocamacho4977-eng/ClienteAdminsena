@@ -3,45 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Course;
-use App\Models\Teacher;
-use App\Models\Apprentice;
-use App\Models\Area;
-use App\Models\TrainingCenter;
-use App\Models\Computer;
+use Illuminate\Support\Facades\Http;
 
 class SearchController extends Controller
 {
     public function search(Request $request)
     {
         $search = trim($request->input('search', ''));
-
-        $courses = [];
-        $teachers = [];
-        $apprentices = [];
-        $areas = [];
-        $trainingCenters = [];
-        $computers = [];
+        $courses = collect();
+        $teachers = collect();
+        $apprentices = collect();
+        $areas = collect();
+        $trainingCenters = collect();
+        $computers = collect();
 
         if ($search !== '') {
-
-            $courses = Course::where( 'course_number', 'like', '%' . $search . '%')
-                ->get();
-
-            $teachers = Teacher::where('name', 'like', '%' . $search . '%')
-                ->get();
-
-            $apprentices = Apprentice::where('name', 'like', '%' . $search . '%')
-                ->get();
-
-            $areas = Area::where('name', 'like', '%' . $search . '%')
-                ->get();
-
-            $trainingCenters = TrainingCenter::where('name', 'like', '%' . $search . '%')
-                ->get();
-
-            $computers = Computer::where( 'number', 'like', '%' . $search . '%')
-                ->get();
+            $url = env('URL_SERVER_API');
+            $courses = $this->searchApi($url . '/v1/courses', $search, [
+                'course_number', 'day', 'area.name', 'trainingCenter.name',
+            ]);
+            $teachers = $this->searchApi($url . '/v1/teachers', $search, [
+                'name', 'email', 'area.name', 'trainingCenter.name',
+            ]);
+            $apprentices = $this->searchApi($url . '/v1/apprentices', $search, [
+                'name', 'email', 'cell_number', 'course.course_number', 'computer.number',
+            ]);
+            $areas = $this->searchApi($url . '/v1/areas', $search, ['name']);
+            $trainingCenters = $this->searchApi($url . '/v1/training_centers', $search, [
+                'name', 'location',
+            ]);
+            $computers = $this->searchApi($url . '/v1/computers', $search, [
+                'number', 'brand',
+            ]);
         }
 
         return view('vistas.search', compact(
@@ -53,5 +46,23 @@ class SearchController extends Controller
             'trainingCenters',
             'computers'
         ));
+    }
+
+    private function searchApi(string $url, string $search, array $fields)
+    {
+        $items = Http::get($url)->throw()->object();
+        $query = strtolower($search);
+
+        return collect($items)->filter(function ($item) use ($fields, $query) {
+            foreach ($fields as $field) {
+                $value = data_get($item, $field);
+
+                if ($value !== null && str_contains(strtolower((string) $value), $query)) {
+                    return true;
+                }
+            }
+
+            return false;
+        })->values();
     }
 }

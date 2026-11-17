@@ -4,9 +4,9 @@
     <h1>LISTAR ÁREAS</h1>
 
     <div class="container">
-        <form method="GET" action="{{ route('area.index') }}" class="row g-2 mb-3">
+        <form method="GET" action="{{ route('area.index') }}" class="row g-2 mb-3" data-table-filter="#idArea">
             <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre o ID" value="{{ $search ?? '' }}">
+                <input type="search" name="search" class="form-control" placeholder="Buscar por nombre o ID" value="{{ $search ?? '' }}">
             </div>
             <div class="col-md-4 d-flex gap-2">
                 <button type="submit" class="btn btn-primary">Buscar</button>
@@ -27,13 +27,13 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($areas->unique('name') as $area)
+                @forelse (collect($areas)->unique('name') as $area)
                     <tr>
                         <td>{{ $area->name }}</td>
                         <td>
-                            @if ($area->urlFoto)
+                            @if ($area->imagen_url)
                                 <img
-                                    src="{{ asset('storage/images/' . $area->urlFoto) }}"
+                                    src="{{ $area->imagen_url }}"
                                     alt="Imagen del área"
                                     width="80"
                                     height="80"
@@ -45,14 +45,18 @@
                         <td>
                             <a href="{{ route('area.show', $area->id) }}" class="btn btn-sm btn-primary">mostrar</a>
                             <a href="{{ route('area.edit', $area->id) }}" class="btn btn-sm btn-secondary">editar</a>
-                            <form action="{{ route('area.destroy', $area->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('Eliminar área? Esto borrará {{ $area->courses->count() }} curso(s) y {{ $area->teachers->count() }} profesor(es) relacionados.')">
+                            <form action="{{ route('area.destroy', $area->id) }}" method="POST" style="display:inline-block" onsubmit="return confirm('¿Eliminar esta área?')">
                                 @csrf
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Eliminar</button>
                             </form>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center">No hay áreas registradas.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

@@ -10,7 +10,7 @@ class ApprenticeController extends Controller
     private function fetchDataFromApi($url)
     {
         $response = Http::get($url);
-        return $response->json();
+        return $response->throw()->object();
     }
 
     public function index()
@@ -53,7 +53,7 @@ class ApprenticeController extends Controller
     public function show($id)
     {
         $url = env('URL_SERVER_API');
-        $apprentice = $this->fetchDataFromApi($url . '/v1/apprentices/' . $id);
+        $apprentice = $this->fetchDataFromApi($url . '/v1/apprentice/' . $id);
 
         return view('apprentice.show', compact('apprentice'));
     }
@@ -61,7 +61,7 @@ class ApprenticeController extends Controller
     public function edit($id)
     {
         $url = env('URL_SERVER_API');
-        $apprentice = $this->fetchDataFromApi($url . '/v1/apprentices/' . $id);
+        $apprentice = $this->fetchDataFromApi($url . '/v1/apprentice/' . $id);
         $courses = $this->fetchDataFromApi($url . '/v1/courses');
         $computers = $this->fetchDataFromApi($url . '/v1/computers');
 
@@ -71,7 +71,7 @@ class ApprenticeController extends Controller
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url . '/v1/apprentices/' . $id, $request->all());
+        Http::put($url . '/v1/apprentice/' . $id, $request->all())->throw();
 
         return redirect()->route('apprentice.index');
     }
@@ -79,7 +79,7 @@ class ApprenticeController extends Controller
     public function destroy($id)
     {
         $url = env('URL_SERVER_API');
-        Http::delete($url . '/v1/apprentices/' . $id);
+        Http::delete($url . '/v1/apprentice/' . $id)->throw();
 
         return redirect()->route('apprentice.index');
     }

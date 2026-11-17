@@ -11,16 +11,16 @@
 
             <div class="mb-3">
                 <label class="form-label">Número</label>
-                <input type="number" name="number" class="form-control" required>
+                <input type="number" name="number" class="form-control" value="{{ old('number') }}" required>
             </div>
 
             <div class="mb-3">
                 <label class="form-label">Marca</label>
-                <input type="text" name="brand" class="form-control" required>
+                <input type="text" name="brand" class="form-control" value="{{ old('brand') }}" required>
             </div>
             <div class="mb-3">
                 <label class="form-label">Imagen</label>
-                <input type="file" name="urlFoto" class="form-control-file" accept="image/*">
+                <input type="file" name="imagen" class="form-control" accept="image/jpeg,image/png,image/webp" required>
             </div>
 
             <button type="submit" class="btn btn-primary">Crear Computadora</button>

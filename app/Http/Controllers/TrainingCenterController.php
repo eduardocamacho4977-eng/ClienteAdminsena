@@ -10,7 +10,7 @@ class TrainingCenterController extends Controller
     private function fetchDataFromApi($url)
     {
         $response = Http::get($url);
-        return $response->json();
+        return $response->throw()->object();
     }
 
     public function index()
@@ -23,10 +23,7 @@ class TrainingCenterController extends Controller
 
     public function create()
     {
-        $url = env('URL_SERVER_API');
-        $training_center = Http::get($url . '/v1/training_centers')->json();
-
-        return view('training_center.create', compact('training_center'));
+        return view('training_center.create');
     }
 
     public function store(Request $request)
@@ -43,13 +40,13 @@ class TrainingCenterController extends Controller
          $response = Http::attach('imagen',file_get_contents($file->getRealPath()),$file->getClientOriginalName())
         ->post(env('URL_SERVER_API') . '/v1/training_centers',['name' => $request->name, 'location' => $request->location]);
 
-        return redirect()->route('trainingcenter.index')->with('success', 'Centro de formación creado correctamente.');
+        return redirect()->route('training_center.index')->with('success', 'Centro de formación creado correctamente.');
     }
 
     public function show($id)
     {
         $url = env('URL_SERVER_API');
-        $training_center = $this->fetchDataFromApi($url . '/v1/training_centers/' . $id);
+        $training_center = $this->fetchDataFromApi($url . '/v1/training_center/' . $id);
 
         return view('training_center.show', compact('training_center'));
     }
@@ -57,7 +54,7 @@ class TrainingCenterController extends Controller
     public function edit($id)
     {
         $url = env('URL_SERVER_API');
-        $training_center = $this->fetchDataFromApi($url . '/v1/training_centers/' . $id);
+        $training_center = $this->fetchDataFromApi($url . '/v1/training_center/' . $id);
 
         return view('training_center.edit', compact('training_center'));
     }
@@ -65,16 +62,16 @@ class TrainingCenterController extends Controller
     public function update(Request $request, $id)
     {
         $url = env('URL_SERVER_API');
-        Http::put($url . '/v1/training_centers/' . $id, $request->all());
+        Http::put($url . '/v1/training_center/' . $id, $request->all())->throw();
 
-        return redirect()->route('trainingcenter.index');
+        return redirect()->route('training_center.index');
     }
 
     public function destroy($id)
     {
         $url = env('URL_SERVER_API');
-        Http::delete($url . '/v1/training_centers/' . $id);
+        Http::delete($url . '/v1/training_center/' . $id)->throw();
 
-        return redirect()->route('trainingcenter.index');
+        return redirect()->route('training_center.index');
     }
 }
