@@ -90,7 +90,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div>
                   
-                   <h1 class="display-5 fw-bold" style="color: #00A651;">administracion</h1>
+                   <h1 class="display-5 fw-bold" style="color: #00A651;">Administración</h1>
                 </div>
 
                 <i class="bi bi-sliders2 fs-2" style="color: #00A651;" aria-hidden="true"></i>

@@ -25,7 +25,8 @@ class LoginController extends Controller
             $request->session()->regenerate();
             $request->session()->put('selected_role', Auth::user()->role ?? User::ROLE_APPRENTICE);
 
-            return redirect()->intended(route('administracion'));
+            return redirect()->intended(route('administracion'))
+                ->with('welcome_message', '¡Bienvenido!');
         }
 
         return back()->withErrors([
@@ -59,7 +60,8 @@ class LoginController extends Controller
         Auth::login($user);
         $request->session()->put('selected_role', $user->role ?? User::ROLE_APPRENTICE);
 
-        return redirect()->route('administracion');
+        return redirect()->route('administracion')
+            ->with('welcome_message', '¡Bienvenido!');
     }
 
     public function switchRole(Request $request)

@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark" style="background: #00A651;">
   <div class="container">
     <a class="navbar-brand d-flex align-items-center me-3" href="{{ url('/') }}">
-      <img src="{{ asset('image/logo sena.png') }}" alt="Logo SENA" style="height: 40px; margin-right: 8px; border-radius: 50%;">
+      <img src="{{ asset('image/logo sena.png') }}" alt="Logo del SENA" width="44" height="44" class="me-2" style="object-fit: contain; border-radius: 50%;">
       <span style="color: #ffffff; font-weight: bold;">Sena</span>
     </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,10 @@
           </li>
 
           <li class="nav-item">
+            <span class="navbar-text text-white me-2">{{ auth()->user()->name }}</span>
+          </li>
+
+          <li class="nav-item">
             <form action="{{ route('logout') }}" method="POST" class="d-inline">
               @csrf
               <button type="submit" class="btn nav-link text-white border-0 bg-transparent" style="cursor: pointer;">
@@ -102,3 +106,11 @@
     </div>
   </div>
 </nav>
+
+@if (session('welcome_message') && auth()->check())
+  <div class="container mt-3">
+    <div class="alert alert-success mb-0" role="status">
+      {{ session('welcome_message') }}, {{ auth()->user()->name }}.
+    </div>
+  </div>
+@endif

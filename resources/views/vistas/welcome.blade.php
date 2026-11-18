@@ -15,6 +15,12 @@
             flex-direction: column;
         }
         main { flex: 1; }
+        .welcome-logo {
+            width: 82px;
+            height: 82px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
         footer {
             background: #00A651;
             padding: 2rem 0;
@@ -141,7 +147,10 @@
     <main class="container py-5 hero">
         <div class="row align-items-center">
             <div class="col-lg-6">
-                <h1 class="display-5 fw-bold" style="color: #00A651;">SENA</h1>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <img src="{{ asset('image/logo sena.png') }}" alt="Logo del SENA" class="welcome-logo">
+                    <h1 class="display-5 fw-bold mb-0" style="color: #00A651;">SENA</h1>
+                </div>
                 <p class="lead" style="color: #666666;">Gestiona cursos, instructores, aprendices y centros de formación con una interfaz simple y moderna.</p>
                 <div class="d-flex gap-2 mt-4">
                     <a href="{{ route('course.index') }}" class="btn btn-sena btn-lg">Ver cursos</a>
